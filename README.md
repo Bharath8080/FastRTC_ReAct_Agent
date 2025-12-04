@@ -1,6 +1,6 @@
-# 🤖 Samantha - AI Assistant with RAG
+# 🤖 Ultra Low Latency Voice AI Agent with Multi-Tool Support: Samantha
 
-An intelligent AI assistant built with **Streamlit**, **LangGraph**, and **Cerebras**. Samantha provides a clean text-based chat interface with advanced capabilities including web search, RAG-based document queries, flight & hotel booking, stock market analysis, and weather updates.
+An intelligent AI assistant built with **FastRTC**, **Streamlit**, **LangGraph**, and **Cerebras**. Samantha provides both an **ultra-low latency voice interface** and a **clean text-based chat interface** with advanced capabilities including web search, RAG-based document queries, flight & hotel booking, stock market analysis, and weather updates.
 
 ## ✨ Key Features
 
