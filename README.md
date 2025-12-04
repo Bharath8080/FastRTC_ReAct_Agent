@@ -1,43 +1,53 @@
-# 🎙️ FastRTC Voice Agent
+# 🤖 Samantha - AI Assistant with RAG
 
-A high-performance, ultra-low latency voice assistant built with **FastRTC**, **LangGraph**, and **Cerebras**. This agent supports real-time voice interaction with advanced capabilities including web search, RAG-based document queries, flight & hotel booking, stock market analysis, shopping comparisons, and weather updates.
+An intelligent AI assistant built with **Streamlit**, **LangGraph**, and **Cerebras**. Samantha provides a clean text-based chat interface with advanced capabilities including web search, RAG-based document queries, flight & hotel booking, stock market analysis, and weather updates.
 
 ## ✨ Key Features
 
-- **🎯 Ultra-Low Latency**: Powered by FastRTC for real-time voice streaming
+- **💬 Clean Chat Interface**: Streamlit-based UI for seamless text conversations
 - **🧠 Intelligent Agent**: Built with LangGraph and Cerebras (GPT-OSS-120B) for context-aware responses
-- **🎤 Voice Processing**: SpeechRecognition (Google) STT + Cartesia Sonic 3 TTS
 - **📚 RAG System**: ChromaDB-powered document knowledge base with PDF ingestion
-- **🛠️ Rich Toolset**: 8 specialized tools for diverse tasks
-- **🎨 Clean Logging**: Color-coded, emoji-enhanced performance monitoring
-- **🌐 Gradio UI**: Beautiful web interface for seamless interaction
+- **🛠️ Rich Toolset**: 7 specialized tools for diverse tasks
+- **📄 Document Upload**: Easy PDF ingestion through web interface
+- **🎨 Modern UI**: Beautiful, responsive design with emoji-enhanced interactions
 
 ## 🏗️ Architecture
 
 ```mermaid
 graph TB
-    A[🌐 Gradio Web UI] --> B[🎙️ FastRTC Engine]
-    B --> C[🎤 SpeechRecognition STT]
-    C --> D[🧠 LangGraph Agent]
-    D --> E[🤖 Cerebras LLM]
-    E --> F[🛠️ Tools Layer]
-    F --> G[🔊 Cartesia Sonic 3 TTS]
-    G --> B
-    
-    F --> H[🔍 Tavily Search]
-    F --> I[📚 ChromaDB RAG]
-    F --> J[✈️ Flight/Hotel]
-    F --> K[🛍️ Shopping]
-    F --> L[📈 Stocks]
-    F --> M[🌦️ Weather]
+    subgraph "User Interfaces"
+        A[🌐 Streamlit UI] --> B[💬 Chat Interface]
+        A --> C[📚 Document Upload]
+        D[🎙️ Gradio UI] --> E[⚡ FastRTC Engine]
+    end
+
+    subgraph "Core Logic"
+        B --> F[🧠 LangGraph Agent]
+        E --> G[🎤 SpeechRecognition STT]
+        G --> F
+        F --> H[🤖 Cerebras LLM]
+        F --> I[🔊 Cartesia TTS]
+        I --> E
+    end
+
+    subgraph "Data & Tools"
+        C --> J[📄 PDF Processing]
+        J --> K[📊 ChromaDB]
+        F --> L[🛠️ Tools Layer]
+        
+        L --> M[🔍 Tavily Search]
+        L --> K
+        L --> N[✈️ Flight/Hotel]
+        L --> O[📈 Stocks]
+        L --> P[🌦️ Weather]
+    end
 ```
 
 ### 🔄 Data Flow
 
 ```
-Voice Input → SpeechRecognition → LangGraph Agent → Tool Selection → Tool Execution
-                                        ↓                                    ↓
-Voice Output ← Cartesia TTS ← Response Generation ← Results Processing ←────┘
+Text Flow:  Streamlit Input → LangGraph Agent → Tools → Text Response
+Voice Flow: FastRTC Audio → STT → LangGraph Agent → Tools → TTS → FastRTC Audio
 ```
 
 ## 🛠️ Tools & Capabilities
@@ -48,7 +58,6 @@ Voice Output ← Cartesia TTS ← Response Generation ← Results Processing ←
 | 📚 **Database Search** | Query uploaded PDF documents (RAG) | ChromaDB + HuggingFace |
 | ✈️ **Flight Search** | Find flight options with pricing | Firecrawl + Kayak |
 | 🏨 **Hotel Search** | Search hotels and accommodations | Firecrawl + Kayak |
-| 🛍️ **Shopping** | Product search and price comparison | Serper (Google Shopping) |
 | 📈 **Stock Price** | Real-time stock prices | YFinance |
 | 🏢 **Company Info** | Company details and market cap | YFinance |
 | 🌦️ **Weather** | Current weather conditions | OpenWeatherMap |
@@ -57,7 +66,8 @@ Voice Output ← Cartesia TTS ← Response Generation ← Results Processing ←
 
 | Component | Technology |
 |-----------|-----------|
-| **Framework** | [FastRTC](https://github.com/fastrtc/fastrtc) |
+| **UI Frameworks** | [Streamlit](https://streamlit.io/) (Chat) & [Gradio](https://gradio.app/) (Voice) |
+| **Voice Streaming** | [FastRTC](https://github.com/fastrtc/fastrtc) |
 | **LLM** | [Cerebras](https://cerebras.net/) (gpt-oss-120b) |
 | **Agent** | [LangGraph](https://langchain-ai.github.io/langgraph/) with InMemorySaver |
 | **STT** | SpeechRecognition (Google) |
@@ -65,28 +75,29 @@ Voice Output ← Cartesia TTS ← Response Generation ← Results Processing ←
 | **Vector DB** | ChromaDB |
 | **Embeddings** | HuggingFace (sentence-transformers/all-MiniLM-L6-v2) |
 | **RAG LLM** | Groq (llama-3.3-70b-versatile) |
-| **UI** | Gradio 5.29.1 |
-| **Logging** | Loguru |
+| **PDF Processing** | PyPDF, RecursiveCharacterTextSplitter |
 
 ## 📋 Prerequisites
 
 - **Python**: 3.10 or higher
 - **API Keys** (required):
   - [Cerebras](https://cerebras.net/) - Main LLM
-  - [Cartesia](https://cartesia.ai/) - TTS
+  - [Cartesia](https://cartesia.ai/) - Ultra-fast TTS
   - [Groq](https://groq.com/) - RAG LLM
   - [Tavily](https://tavily.com/) - Web search
   - [Firecrawl](https://firecrawl.dev/) - Travel scraping
   - [Serper](https://serper.dev/) - Shopping search
   - [OpenWeatherMap](https://openweathermap.org/) - Weather
   - [HuggingFace](https://huggingface.co/) - Embeddings (optional token)
+- **Optional**:
+  - [LangSmith](https://smith.langchain.com/) - Agent tracing and monitoring
 
 ## 📦 Installation
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/jesuscopado/fastrtc-groq-voice-agent.git
-cd fastrtc-groq-voice-agent
+git clone https://github.com/Bharath8080/FastRTC_ReAct_Agent.git
+cd FastRTC_ReAct_Agent
 ```
 
 ### 2. Create Virtual Environment
@@ -112,10 +123,10 @@ Create a `.env` file in the root directory:
 ```ini
 # Core LLM
 CEREBRAS_API_KEY=your_cerebras_key
+GROQ_API_KEY=your_groq_key
 
 # Voice Services
 CARTESIA_API_KEY=your_cartesia_key
-GROQ_API_KEY=your_groq_key
 
 # Search & Tools
 TAVILY_API_KEY=your_tavily_key
@@ -123,38 +134,53 @@ FIRECRAWL_API_KEY=your_firecrawl_key
 SERPER_API_KEY=your_serper_key
 OPENWEATHERMAP_API_KEY=your_openweathermap_key
 
-# Optional
+# Optional - Embeddings
 HF_TOKEN=your_huggingface_token
+
+# Optional - LangSmith Tracing
+LANGSMITH_TRACING=true
+LANGSMITH_ENDPOINT=https://api.smith.langchain.com
+LANGSMITH_API_KEY=your_langsmith_key
+LANGSMITH_PROJECT=FastRTC_Agent
 ```
 
 ## 🚀 Usage
 
-### Running the Voice Agent
+### 🎙️ Running Voice Agent (Ultra-Low Latency)
 
-**Standard Mode (Gradio Web UI)**:
+For real-time Speech-to-Speech (STS) interaction with ultra-low latency:
+
 ```bash
 python app.py
 ```
 
-The app will launch at `http://localhost:7860`
+The Gradio UI will launch at `http://localhost:7860`. This interface uses **FastRTC** for streaming audio and **Cartesia Sonic 3** for high-quality, low-latency speech generation.
 
-**Phone Mode (FastPhone)**:
+### 💬 Running Text Chat & RAG
+
+For text-based interaction and document management:
+
 ```bash
-python app.py --phone
+streamlit run main.py
 ```
+
+The app will launch at `http://localhost:8501`
+
+### 💬 Using the Chat Interface
+
+1. **Open the Chat tab** (default)
+2. **Type your question** in the input field
+3. **Click Send** or press Enter
+4. **View responses** in the chat history
 
 ### 📚 Adding Documents to RAG System
 
-To enable the agent to answer questions about your documents:
+To enable Samantha to answer questions about your documents:
 
-1. **Launch the ingestion tool**:
-```bash
-streamlit run ingest.py
-```
-
-2. **Upload PDFs** through the Streamlit interface
-3. **Click "Ingest Documents"** to process and store in ChromaDB
-4. **Ask questions** via the voice agent using the database tool
+1. **Switch to the "Upload Documents" tab**
+2. **Upload PDFs** using the file uploader
+3. **Click "🚀 Ingest Documents"** to process and store in ChromaDB
+4. **Return to Chat tab** and ask questions about your documents
 
 **Example queries**:
 - "What does the manual say about installation?"
@@ -164,9 +190,10 @@ streamlit run ingest.py
 ## 📂 Project Structure
 
 ```
-fastrtc-groq-voice-agent/
-├── app.py                      # Main FastRTC application
-├── ingest.py                   # Streamlit PDF ingestion UI
+FastRTC_ReAct_Agent/
+├── main.py                     # Streamlit UI application
+├── app.py                      # Alternative Gradio interface
+├── ingest.py                   # Standalone PDF ingestion tool
 ├── requirements.txt            # Python dependencies
 ├── .env                        # Environment variables (create this)
 │
@@ -177,64 +204,64 @@ fastrtc-groq-voice-agent/
 │   ├── __init__.py
 │   ├── tavily_tool.py          # Web search
 │   ├── database_tool.py        # RAG document search
-│   ├── flight_tool.py          # Flight search (Kayak)
-│   ├── hotel_tool.py           # Hotel search (Kayak)
-│   ├── shop.py                 # Shopping (Google)
+│   ├── flight_tool.py          # Flight search
+│   ├── hotel_tool.py           # Hotel search
 │   ├── stock_tools.py          # Stock price & company info
 │   └── weather_tool.py         # Weather data
+│
+├── assets/
+│   └── fastrtc.png             # Application logo
 │
 └── chroma_db/                  # ChromaDB vector store (auto-created)
 ```
 
 ## 🎯 How It Works
 
-### 1. Voice Input Processing
+### 1. User Input
 ```python
-# SpeechRecognition converts audio to text
-transcript = recognizer.recognize_google(audio_data)
+# User types message in Streamlit chat interface
+user_input = st.text_input("Ask me anything...")
 ```
 
 ### 2. Agent Decision Making
 ```python
 # LangGraph agent with Cerebras LLM
 agent_reply = agent.invoke(
-    {"messages": [{"role": "user", "content": transcript}]},
+    {"messages": [{"role": "user", "content": user_input}]},
     config=agent_config
 )
 ```
 
 ### 3. Tool Execution
-The agent intelligently selects from 8 available tools based on the query:
+The agent intelligently selects from 7 available tools based on the query:
 - **General questions** → Tavily Search
 - **Document questions** → Database Search (ChromaDB)
 - **Travel queries** → Flight/Hotel Tools
-- **Shopping** → Shopping Search
 - **Stocks** → YFinance Tools
 - **Weather** → Weather Tool
 
-### 4. Voice Output
+### 4. Response Display
 ```python
-# Cartesia Sonic 3 TTS with streaming
-for chunk in generate_speech(reply_clean):
-    yield chunk  # Real-time audio streaming
+# Display response in chat interface
+st.session_state.messages.append({
+    "role": "assistant", 
+    "content": response
+})
 ```
 
 ## 🎨 Features in Detail
 
-### Clean, Colored Logging
-```
-🎙 Received audio input
-👂 Transcribed: "What's the weather in Paris?"
-💬 Response: "The current weather in Paris is..."
-🔊 Speaking...
-⚡ Performance: STT=1.2s | LLM=0.8s | TTS=1.5s | Total=3.5s | Chunks=42
-```
+### Chat Interface
+- **Real-time messaging**: Instant responses with conversation history
+- **Session persistence**: Chat history maintained during session
+- **Clean UI**: Emoji-enhanced, user-friendly design
+- **Error handling**: Graceful error messages for failed requests
 
-### Text Cleaning for TTS
-Automatically removes markdown formatting for natural speech:
-- Strips `**bold**`, `*italic*`, `#headers`
-- Removes code blocks and tables
-- Cleans URLs and special characters
+### Document Management
+- **Multi-file upload**: Upload multiple PDFs simultaneously
+- **Progress tracking**: Visual feedback during ingestion
+- **Automatic chunking**: Smart text splitting for optimal retrieval
+- **Persistent storage**: Documents stored in ChromaDB for future queries
 
 ### RAG System
 - **Embeddings**: sentence-transformers/all-MiniLM-L6-v2 (384 dimensions)
@@ -243,23 +270,6 @@ Automatically removes markdown formatting for natural speech:
 - **Retrieval**: Top 3 relevant chunks with source metadata
 
 ## 🔧 Advanced Configuration
-
-### Adjust Speech Detection Threshold
-```python
-# In app.py
-algo_options=AlgoOptions(speech_threshold=0.4)  # Lower = more sensitive
-```
-
-### Modify TTS Voice
-```python
-# In app.py - Change Cartesia voice ID
-CARTESIA_TTS_CONFIG = {
-    "voice": {
-        "mode": "id",
-        "id": "your-voice-id-here",  # Browse Cartesia voice library
-    }
-}
-```
 
 ### Customize Agent Behavior
 ```python
@@ -270,36 +280,57 @@ You are Samantha, a helpful AI agent.
 """
 ```
 
+### Adjust LLM Parameters
+```python
+# In scripts/agent.py
+model = ChatCerebras(
+    model="gpt-oss-120b",
+    max_tokens=512,  # Adjust response length
+    temperature=0.7,  # Control randomness (0.0-1.0)
+)
+```
+
+### Modify RAG Settings
+```python
+# In main.py
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,      # Adjust chunk size
+    chunk_overlap=200,    # Adjust overlap
+)
+```
+
 ## 📊 Performance Metrics
 
-- **STT Latency**: ~1-2s (Google Speech Recognition)
 - **LLM Latency**: ~0.5-1.5s (Cerebras gpt-oss-120b)
-- **TTS Latency**: ~1-2s (Cartesia Sonic 3 streaming)
-- **Total Round-trip**: ~3-5s average
+- **Tool Execution**: Varies by tool (0.5-3s)
+- **RAG Query**: ~0.5-1s (ChromaDB retrieval)
+- **Total Response Time**: ~1-4s average
 
 ## 🐛 Troubleshooting
 
-### Audio Issues
-- Ensure microphone permissions are granted
-- Check browser compatibility (Chrome/Edge recommended)
-- Verify audio sample rate (24000 Hz for Cartesia)
-
 ### Database Tool Not Working
-```bash
-# Run ingestion first
-streamlit run ingest.py
-# Upload at least one PDF
-```
+- Upload at least one PDF via the "Upload Documents" tab
+- Ensure ChromaDB directory has write permissions
+- Check that `GROQ_API_KEY` is set for RAG queries
 
 ### API Key Errors
 - Verify all keys in `.env` file
 - Check API quotas and billing
 - Ensure no extra spaces in `.env`
+- Restart the application after updating `.env`
 
 ### Import Errors
 ```bash
 # Reinstall dependencies
 pip install -r requirements.txt --force-reinstall
+```
+
+### Streamlit Issues
+```bash
+# Clear Streamlit cache
+streamlit cache clear
+# Restart the application
+streamlit run main.py
 ```
 
 ## 🤝 Contributing
@@ -318,11 +349,11 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🙏 Acknowledgments
 
-- **FastRTC** - Real-time voice streaming framework
+- **Streamlit** - Beautiful web UI framework
 - **Cerebras** - Ultra-fast LLM inference
-- **Cartesia** - High-quality TTS
 - **LangChain/LangGraph** - Agent orchestration
 - **ChromaDB** - Vector database
+- **HuggingFace** - Embeddings and models
 
 ## 📞 Support
 
@@ -333,4 +364,4 @@ For issues and questions:
 
 ---
 
-**Built with ❤️ using FastRTC, LangGraph, and Cerebras**
+**Built with ❤️ using Streamlit, LangGraph, and Cerebras**
